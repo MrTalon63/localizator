@@ -8,7 +8,7 @@
 	})
 	if (reqTrackers.status === 401) goto("/login");
 	const myTrackers = await reqTrackers.json() as {trackerUID: string, name: string}[]
-	if (!localStorage.getItem("selectedTrackers")) localStorage.setItem("selectedTrackers", JSON.stringify(myTrackers.map(tracker => tracker.trackerUID)));
+	if (localStorage.getItem("selectedTrackers") == "null") localStorage.setItem("selectedTrackers", JSON.stringify(myTrackers.map(tracker => tracker.trackerUID)));
 </script>
 
 <script lang="ts">
@@ -34,7 +34,11 @@
 
 	$: {
 		getPositions(selectedTrackers);
-		localStorage.setItem("selectedTrackers", JSON.stringify(selectedTrackers));
+		if (localStorage.getItem("selectedTrackers") == "null") {
+			getTrackers();
+		} else {
+			localStorage.setItem("selectedTrackers", JSON.stringify(selectedTrackers));
+		}
 	}
 
 	async function getPositions(trackers: string[]) {
@@ -59,6 +63,17 @@
 			positions.forEach(position => position.name = name);
 			selectedTrackerData = [...selectedTrackerData, positions];
 		})
+	}
+
+	async function getTrackers() {
+		const reqTrackers = await fetch("https://tracker-api.mrtalon.eu/api/trackers", {
+			headers: {
+				"Authorization": `Bearer ${localStorage.getItem("token")}`
+			}
+		})
+		if (reqTrackers.status === 401) goto("/login");
+		const myTrackers = await reqTrackers.json() as {trackerUID: string, name: string}[]
+		if (localStorage.getItem("selectedTrackers") == "null") localStorage.setItem("selectedTrackers", JSON.stringify(myTrackers.map(tracker => tracker.trackerUID)));
 	}
 </script>
 
