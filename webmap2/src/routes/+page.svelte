@@ -155,7 +155,7 @@
 	</div>
 
 	<button on:click={() => {window.location.reload()}} class="bg-slate-500 border-black border-solid p-2 m-2">Refresh</button>
-	<button on:click={() => {localStorage.removeItem("token"); localStorage.removeItem("selectedTrackers"); goto("/login")}} class="bg-slate-500 border-black border-solid p-2 m-2">Remove Token</button>
+	<button on:click={() => {localStorage.clear(); goto("/login")}} class="bg-slate-500 border-black border-solid p-2 m-2">Remove Token</button>
 </div>
 
 <style>
