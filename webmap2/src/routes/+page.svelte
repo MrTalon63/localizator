@@ -108,14 +108,15 @@
 		{#each selectedTrackerData as trackersData}
 			{#each trackersData as trackerData}
 				{#if trackerData.latest === true}
-					<DefaultMarker lngLat={[trackerData.longitude, trackerData.latitude]} class="">
+					<Marker lngLat={[trackerData.longitude, trackerData.latitude]} class="">
 						<Popup>
 							<p>Nazwa: {trackerData.name}</p>
 							<p>Czas: {trackerData.timestamp}</p>
 							<p>Dokładność: {trackerData.accuracy}</p>
 							<p>Typ: {trackerData.type}</p>
 						</Popup>
-					</DefaultMarker>
+						<img src="https://c.mrtalon.eu/u/aprs_car.webp" style="height: 48px;">
+					</Marker>
 				{:else}
 					<Marker lngLat={[trackerData.longitude, trackerData.latitude]} class="h-2 w-2 rounded-full place-items-center bg-red-700">
 						<Popup>
