@@ -31,7 +31,7 @@
 
 	let zoomLevel = (localStorage.getItem("zoomLevel") ? parseInt(localStorage.getItem("zoomLevel")!) : 10);
 	let center = (localStorage.getItem("center") ? JSON.parse(localStorage.getItem("center")!) : [21.05, 52.5]);
-	
+	let time = localStorage.getItem("time") || "24";
 
 	$: {
 		getPositions(selectedTrackers);
@@ -45,7 +45,7 @@
 	async function getPositions(trackers: string[]) {
 		trackers.forEach(async tracker => {
 			const name = myTrackers.find(myTracker => myTracker.trackerUID === tracker)!.name;
-			const reqPositions = await fetch(`https://tracker-api.mrtalon.eu/api/tracker/${tracker}/positions?time=12`, {
+			const reqPositions = await fetch(`https://tracker-api.mrtalon.eu/api/tracker/${tracker}/positions?time=${time}`, {
 				headers: {
 					"Authorization": `Bearer ${localStorage.getItem("token")}`
 				}
@@ -129,8 +129,9 @@
 					</Marker>
 				{/if}
 			{/each}
+
 			<LineLayer
-				id = {`line-${trackersData[0].trackerUID}`}
+				id = {`line-${Math.random() * 1000}`}
 				source={{
 					type: "geojson",
 					data: {
@@ -158,21 +159,35 @@
 	</MapLibre>
 
 	<div>
-		<select bind:value={selectedTracker}>
+		<select bind:value={selectedTracker} class="placeholder-black font-semibold border-b-black border-2 bg-slate-400 p-2 m-2">
 			{#each myTrackers as tracker}
 				<option value={tracker.trackerUID}>{tracker.name}</option>
 			{/each}
 		</select>
-		<button on:click={() => {if (!selectedTrackers.includes(selectedTracker)) selectedTrackers = [...selectedTrackers, selectedTracker]}} class="bg-slate-500 border-black border-solid p-2 m-2">Add</button>
-		<button on:click={() => {selectedTrackers = selectedTrackers.filter(tracker => tracker !== selectedTracker); window.location.reload()}} class="bg-slate-500 border-black border-solid p-2 m-2">Remove</button>
-		<p class="text-xl font-semibold">Selected trackers:</p>
+		<button on:click={() => {if (!selectedTrackers.includes(selectedTracker)) selectedTrackers = [...selectedTrackers, selectedTracker]}} class="bg-slate-500 border-black border-solid p-2 m-2">Dodaj</button>
+		<button on:click={() => {selectedTrackers = selectedTrackers.filter(tracker => tracker !== selectedTracker); window.location.reload()}} class="bg-slate-500 border-black border-solid p-2 m-2">Usuń</button>
+		<p class="text-xl font-semibold">Wybrane lokalizatory:</p>
 		{#each selectedTrackers as tracker}
 			<p>{myTrackers.find(myTracker => myTracker.trackerUID === tracker)?.name}</p>
 		{/each}
+
+		<label for="time" class="placeholder-black font-semibold m-1">Czas:</label>
+		<select id="time" bind:value={time} on:change={() => {window.localStorage.setItem("time", time); window.location.reload()}} class="placeholder-black font-semibold border-b-black border-2 bg-slate-400 p-2 m-2">
+			<option value="1">1h</option>
+			<option value="3">3h</option>
+			<option value="6">6h</option>
+			<option value="12">12h</option>
+			<option value="24">24h</option>
+			<option value="48">2 dni</option>
+			<option value="72">3 dni</option>
+			<option value="168">7 dni</option>
+			<option value="336">14 dni</option>
+			<option value="720">30 dni</option>
+		</select>
 	</div>
 
-	<button on:click={() => {window.location.reload()}} class="bg-slate-500 border-black border-solid p-2 m-2">Refresh</button>
-	<button on:click={() => {localStorage.clear(); goto("/login")}} class="bg-slate-500 border-black border-solid p-2 m-2">Remove Token</button>
+	<button on:click={() => {window.location.reload()}} class="bg-slate-500 border-black border-solid p-2 m-2">Odśwież</button>
+	<button on:click={() => {localStorage.clear(); goto("/login")}} class="bg-slate-500 border-black border-solid p-2 m-2">Usuń Token</button>
 </div>
 
 <style>
