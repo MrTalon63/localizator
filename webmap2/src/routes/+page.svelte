@@ -13,6 +13,7 @@
 
 <script lang="ts">
 	import { MapLibre, Marker, Popup, DefaultMarker, LineLayer, Layer } from "svelte-maplibre";
+	import { DateTime } from "luxon";
 	import { browser } from "$app/environment";
 
 	let selectedTrackers: string[] = JSON.parse(localStorage.getItem("selectedTrackers")!);
@@ -20,7 +21,7 @@
 	let selectedTrackerData: {
 		name: string
 		trackerUID: string;
-		timestamp: Date;
+		timestamp: string;
 		latitude: number;
 		longitude: number;
 		accuracy: number | null;
@@ -44,7 +45,7 @@
 	async function getPositions(trackers: string[]) {
 		trackers.forEach(async tracker => {
 			const name = myTrackers.find(myTracker => myTracker.trackerUID === tracker)!.name;
-			const reqPositions = await fetch(`https://tracker-api.mrtalon.eu/api/tracker/${tracker}/positions`, {
+			const reqPositions = await fetch(`https://tracker-api.mrtalon.eu/api/tracker/${tracker}/positions?time=12`, {
 				headers: {
 					"Authorization": `Bearer ${localStorage.getItem("token")}`
 				}
@@ -53,7 +54,7 @@
 			const positions = await reqPositions.json() as {
 				name: string;
 				trackerUID: string;
-				timestamp: Date;
+				timestamp: string;
 				latitude: number;
 				longitude: number;
 				accuracy: number | null;
@@ -111,17 +112,17 @@
 					<Marker lngLat={[trackerData.longitude, trackerData.latitude]} class="">
 						<Popup>
 							<p>Nazwa: {trackerData.name}</p>
-							<p>Czas: {trackerData.timestamp}</p>
+							<p>Czas: {DateTime.fromISO(trackerData.timestamp).setLocale("pl").toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}</p>
 							<p>Dokładność: {trackerData.accuracy}</p>
 							<p>Typ: {trackerData.type}</p>
 						</Popup>
-						<img src="https://c.mrtalon.eu/u/aprs_car.webp" style="height: 48px;">
+						<img src="https://c.mrtalon.eu/u/aprs_person.webp" style="height: 48px;">
 					</Marker>
 				{:else}
 					<Marker lngLat={[trackerData.longitude, trackerData.latitude]} class="h-2 w-2 rounded-full place-items-center bg-red-700">
 						<Popup>
 							<p>Nazwa: {trackerData.name}</p>
-							<p>Czas: {trackerData.timestamp}</p>
+							<p>Czas: {DateTime.fromISO(trackerData.timestamp).setLocale("pl").toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}</p>
 							<p>Dokładność: {trackerData.accuracy}</p>
 							<p>Typ: {trackerData.type}</p>
 						</Popup>

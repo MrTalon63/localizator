@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  luxon:
+    specifier: ^3.4.4
+    version: 3.4.4
   svelte-maplibre:
     specifier: ^0.8.4
     version: 0.8.4(svelte@4.2.7)
@@ -28,6 +31,9 @@ devDependencies:
   '@types/leaflet':
     specifier: ^1.9.11
     version: 1.9.11
+  '@types/luxon':
+    specifier: ^3.4.2
+    version: 3.4.2
   '@typescript-eslint/eslint-plugin':
     specifier: ^7.0.0
     version: 7.0.0(@typescript-eslint/parser@7.0.0)(eslint@8.56.0)(typescript@5.0.2)
@@ -828,6 +834,10 @@ packages:
     resolution: {integrity: sha512-Cwqw9h+1LVnsuOutOSNHlIE1DBQ9U/0CCLfAkwtkgggrYRwf7SUlyZM0LQzngpwKyvFQbPLCf6hNMzly56pGZw==}
     dependencies:
       '@types/geojson': 7946.0.14
+
+  /@types/luxon@3.4.2:
+    resolution: {integrity: sha512-TifLZlFudklWlMBfhubvgqTXRzLDI5pCbGa4P8a3wPyUQSW+1xQ5eDsreP9DWHX3tjq1ke96uYG/nwundroWcA==}
+    dev: true
 
   /@types/mapbox__point-geometry@0.1.4:
     resolution: {integrity: sha512-mUWlSxAmYLfwnRBmgYV86tgYmMIICX4kza8YnE/eIlywGe2XoOxlpVnXWwir92xRLjwyarqwpu2EJKD2pk0IUA==}
@@ -2045,6 +2055,11 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
+
+  /luxon@3.4.4:
+    resolution: {integrity: sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==}
+    engines: {node: '>=12'}
+    dev: false
 
   /magic-string@0.30.10:
     resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
