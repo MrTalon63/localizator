@@ -121,7 +121,11 @@
 							<p>Typ: {trackerData.type}</p>
 							<p>Urządzenie: {trackerData.deviceType}</p>
 						</Popup>
-						<img src="https://c.mrtalon.eu/u/aprs_person.webp" style="height: 48px;">
+						{#if trackerData.deviceType === "Tracker 0.1"}
+							<img src="https://c.mrtalon.eu/u/aprs_car.webp" style="height: 48px;">
+						{:else}
+							<img src="https://c.mrtalon.eu/u/aprs_person.webp" style="height: 48px;">
+						{/if}
 					</Marker>
 				{:else}
 					<Marker lngLat={[trackerData.longitude, trackerData.latitude]} class="h-2 w-2 rounded-full place-items-center bg-red-700">
