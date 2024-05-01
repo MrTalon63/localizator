@@ -7,7 +7,7 @@
 		}
 	})
 	if (reqTrackers.status === 401) goto("/login");
-	const myTrackers = await reqTrackers.json() as {trackerUID: string, name: string}[]
+	const myTrackers = await reqTrackers.json() as {trackerUID: string, name: string, device: string}[]
 	if (localStorage.getItem("selectedTrackers") == "null") localStorage.setItem("selectedTrackers", JSON.stringify(myTrackers.map(tracker => tracker.trackerUID)));
 </script>
 
@@ -19,6 +19,7 @@
 	let selectedTrackers: string[] = JSON.parse(localStorage.getItem("selectedTrackers")!);
 	let selectedTracker: string = "";
 	let selectedTrackerData: {
+		deviceType: string;
 		name: string
 		trackerUID: string;
 		timestamp: string;
@@ -45,6 +46,7 @@
 	async function getPositions(trackers: string[]) {
 		trackers.forEach(async tracker => {
 			const name = myTrackers.find(myTracker => myTracker.trackerUID === tracker)!.name;
+			const deviceType = myTrackers.find(myTracker => myTracker.trackerUID === tracker)!.device;
 			const reqPositions = await fetch(`https://tracker-api.mrtalon.eu/api/tracker/${tracker}/positions?time=${time}`, {
 				headers: {
 					"Authorization": `Bearer ${localStorage.getItem("token")}`
@@ -52,6 +54,7 @@
 			});
 			if (reqPositions.status === 401) goto("/login");
 			const positions = await reqPositions.json() as {
+				deviceType: string;
 				name: string;
 				trackerUID: string;
 				timestamp: string;
@@ -62,6 +65,7 @@
 				latest: boolean | undefined;
 			}[];
 			positions.forEach(position => position.name = name);
+			positions.forEach(position => position.deviceType = deviceType);
 			selectedTrackerData = [...selectedTrackerData, positions];
 		})
 	}
@@ -113,8 +117,9 @@
 						<Popup>
 							<p>Nazwa: {trackerData.name}</p>
 							<p>Czas: {DateTime.fromISO(trackerData.timestamp).setLocale("pl").toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}</p>
-							<p>Dokładność: {trackerData.accuracy}</p>
+							<p>Dokładność: {trackerData.accuracy}m</p>
 							<p>Typ: {trackerData.type}</p>
+							<p>Urządzenie: {trackerData.deviceType}</p>
 						</Popup>
 						<img src="https://c.mrtalon.eu/u/aprs_person.webp" style="height: 48px;">
 					</Marker>
@@ -125,6 +130,7 @@
 							<p>Czas: {DateTime.fromISO(trackerData.timestamp).setLocale("pl").toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}</p>
 							<p>Dokładność: {trackerData.accuracy}</p>
 							<p>Typ: {trackerData.type}</p>
+							<p>Urządzenie: {trackerData.deviceType}</p>
 						</Popup>
 					</Marker>
 				{/if}
