@@ -132,7 +132,7 @@
 						<Popup>
 							<p>Nazwa: {trackerData.name}</p>
 							<p>Czas: {DateTime.fromISO(trackerData.timestamp).setLocale("pl").toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}</p>
-							<p>Dokładność: {trackerData.accuracy}</p>
+							<p>Dokładność: {trackerData.accuracy}m</p>
 							<p>Typ: {trackerData.type}</p>
 							<p>Urządzenie: {trackerData.deviceType}</p>
 						</Popup>
