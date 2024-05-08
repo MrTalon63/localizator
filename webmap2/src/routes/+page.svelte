@@ -16,6 +16,8 @@
 	import { DateTime } from "luxon";
 	import { browser } from "$app/environment";
 
+	const colors = ["red", "blue", "green", "yellow", "purple", "orange", "violet", "tomato"];
+
 	let selectedTrackers: string[] = JSON.parse(localStorage.getItem("selectedTrackers")!);
 	let selectedTracker: string = "";
 	let selectedTrackerData: {
@@ -122,9 +124,9 @@
 							<p>Urządzenie: {trackerData.deviceType}</p>
 						</Popup>
 						{#if trackerData.deviceType === "Tracker 0.1"}
-							<img src="https://c.mrtalon.eu/u/aprs_car.webp" style="height: 48px;">
+							<img src="/icons/aprs_car.webp" style="height: 48px;">
 						{:else}
-							<img src="https://c.mrtalon.eu/u/aprs_person.webp" style="height: 48px;">
+							<img src="/icons/aprs_person.webp" style="height: 48px;">
 						{/if}
 					</Marker>
 				{:else}
@@ -158,11 +160,11 @@
 					"line-cap": "round"
 				}}
 				paint={{
-					"line-color": "red",
+					"line-color": `${colors.pop()}`,
 					"line-width": 4,
-					"line-opacity": 0.5
+					"line-opacity": 0.6
 				}}
-		/>
+			/>
 		{/each}
 
 
